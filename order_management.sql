@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 20, 2023 at 05:46 PM
+-- Generation Time: Jun 22, 2023 at 02:27 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -92,10 +92,10 @@ CREATE TABLE `contacts` (
   `phone` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `gender` varchar(255) DEFAULT NULL,
-  `position_id` int(11) NOT NULL DEFAULT 0,
-  `customer_id` int(11) NOT NULL DEFAULT 0,
+  `position_id` int(11) DEFAULT 0,
+  `customer_id` int(11) DEFAULT 0,
   `birthday` date DEFAULT NULL,
-  `user_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -105,7 +105,9 @@ CREATE TABLE `contacts` (
 --
 
 INSERT INTO `contacts` (`id`, `name`, `address`, `phone`, `email`, `gender`, `position_id`, `customer_id`, `birthday`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 'Hà Trung Nghĩa', 'Phú Tân - An Giang', '0339557875', 'nghiavn@gmail.com', NULL, 1, 2, NULL, 1, NULL, NULL);
+(1, 'Hà Trung Nghĩa', 'Phú Tân - An Giang', '0339557875', 'nghiavn@gmail.com', NULL, 1, 2, NULL, 1, NULL, NULL),
+(2, 'Huỳnh Nhật Trường', 'Ninh Kiều - Cần Thơ', '0335648586', 'truong@gmail.com', 'Nam', 3, 4, NULL, 5, NULL, NULL),
+(3, 'Cao Như Thuần', NULL, NULL, 'thuan@gmail.com', NULL, 2, 5, NULL, 0, '2023-06-22 11:32:04', '2023-06-22 11:32:04');
 
 -- --------------------------------------------------------
 
@@ -121,7 +123,6 @@ CREATE TABLE `contracts` (
   `value` decimal(10,2) DEFAULT 0.00,
   `start_day` datetime NOT NULL,
   `finish_day` datetime NOT NULL,
-  `effective_date` datetime DEFAULT NULL,
   `status` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `contract_type` varchar(255) NOT NULL,
@@ -141,9 +142,9 @@ CREATE TABLE `contracts` (
 -- Dumping data for table `contracts`
 --
 
-INSERT INTO `contracts` (`id`, `user_id`, `customer_id`, `contact_id`, `value`, `start_day`, `finish_day`, `effective_date`, `status`, `name`, `contract_type`, `payments`, `transportation`, `phone`, `payment_date`, `payment_type`, `payment_amount`, `sales_attributed_to`, `note`, `created_at`, `updated_at`) VALUES
-(1, 1, 3, NULL, 12000000.00, '2023-06-07 16:31:31', '2023-06-07 16:31:31', NULL, 0, 'Hợp đồng đăng ký gói dịch vụ 01', 'Gói dịch vụ', 'Trả trước', NULL, '0339557475', NULL, 'ATM', '2000000', '', NULL, NULL, NULL),
-(2, 2, 4, NULL, 15000000.00, '2023-06-08 12:25:01', '2023-06-08 12:25:01', NULL, 3, 'Hợp đồng lắp đặt wifi theo năm.', 'Gói dịch vụ', NULL, NULL, '0335447578', NULL, NULL, '5000000', NULL, NULL, NULL, NULL);
+INSERT INTO `contracts` (`id`, `user_id`, `customer_id`, `contact_id`, `value`, `start_day`, `finish_day`, `status`, `name`, `contract_type`, `payments`, `transportation`, `phone`, `payment_date`, `payment_type`, `payment_amount`, `sales_attributed_to`, `note`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, NULL, 12000000.00, '2023-06-07 16:31:31', '2023-06-07 16:31:31', 0, 'Hợp đồng đăng ký gói dịch vụ 01', 'Gói dịch vụ', 'Trả trước', NULL, '0339557475', NULL, 'ATM', '2000000', '', NULL, NULL, NULL),
+(2, 2, 4, NULL, 15000000.00, '2023-06-08 12:25:01', '2023-06-08 12:25:01', 3, 'Hợp đồng lắp đặt wifi theo năm.', 'Gói dịch vụ', NULL, NULL, '0335447578', NULL, NULL, '5000000', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -228,6 +229,7 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `goods` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `order_id` int(11) DEFAULT NULL,
+  `contract_id` int(11) DEFAULT NULL,
   `goods_code` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `unit` varchar(255) DEFAULT NULL,
@@ -237,7 +239,7 @@ CREATE TABLE `goods` (
   `describe` varchar(255) DEFAULT NULL,
   `input_price` double DEFAULT NULL,
   `output_price` double DEFAULT NULL,
-  `warping_ratio` double DEFAULT NULL,
+  `markup_ratio` double DEFAULT NULL,
   `tax` double DEFAULT NULL,
   `total` double DEFAULT NULL,
   `avatar` varchar(255) DEFAULT NULL,
@@ -391,7 +393,7 @@ CREATE TABLE `transactions` (
   `user_id` int(11) DEFAULT NULL,
   `customer_id` int(11) DEFAULT NULL,
   `transaction_type` varchar(255) DEFAULT NULL,
-  `contact_id` varchar(255) DEFAULT NULL,
+  `contact_id` int(11) DEFAULT NULL,
   `start_day` datetime DEFAULT current_timestamp(),
   `deadline_date` datetime DEFAULT current_timestamp(),
   `finish_day` datetime DEFAULT current_timestamp(),
@@ -409,8 +411,8 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`id`, `name`, `description`, `user_id`, `customer_id`, `transaction_type`, `contact_id`, `start_day`, `deadline_date`, `finish_day`, `status`, `result`, `priority`, `transaction_address`, `document`, `created_at`, `updated_at`) VALUES
-(1, 'Đăng ký Gói DV01', 'Đăng ký sử dụng gói dịch vụ 01 trong 1 tháng tới.', 1, 3, 'Giao dịch cung cấp dịch vụ', NULL, '2023-06-06 00:19:34', '2023-06-07 00:19:34', '2023-06-06 00:19:34', 1, 'Thành công', 3, 'Cần Thơ', NULL, '2023-06-05 17:19:34', '2023-06-05 17:19:34'),
-(12, 'Test', 'Chỉnh sửa final', NULL, 2, 'Giao dịch mua sắm', NULL, '2023-06-04 22:12:00', '2023-06-09 22:12:24', '2023-06-08 22:12:00', 3, 'OK', 2, NULL, 'documents/hello.txt', '2023-06-09 15:12:24', '2023-06-20 15:45:18');
+(1, 'Đăng ký Gói DV01', 'Đăng ký sử dụng gói dịch vụ 01 trong 1 tháng tới.', 1, 3, 'Giao dịch cung cấp dịch vụ', 1, '2023-06-06 00:19:34', '2023-06-07 00:19:34', '2023-06-06 00:19:34', 1, 'Thành công', 3, 'Cần Thơ', NULL, '2023-06-05 17:19:34', '2023-06-05 17:19:34'),
+(14, 'Test2', 'aaaa', NULL, 4, 'Giao dịch cung cấp dịch vụ', 2, '2023-06-05 16:45:00', '2023-06-20 16:45:00', NULL, 0, NULL, 1, NULL, 'C:\\xampp\\tmp\\phpCD80.tmp', '2023-06-22 09:46:01', '2023-06-22 12:25:02');
 
 -- --------------------------------------------------------
 
@@ -634,7 +636,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `contracts`
@@ -700,7 +702,7 @@ ALTER TABLE `positions`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
