@@ -111,9 +111,32 @@
                                 <div class="col-6">
                                     <div class="row form-group">
                                         <div class="col-sm-5">
+                                            <label for="example-text-input" class="col-form-label input-label"><strong>Tỉnh thành:</strong></label>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <p class="col-form-label input-label">{{ $customer->province->name ?? '...' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-5">
+                                            <label for="example-text-input" class="col-form-label input-label"><strong>Quận huyện:</strong></label>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <p class="col-form-label input-label">{{ $customer->district->name ?? '...' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-5">
+                                            <label for="example-text-input" class="col-form-label input-label"><strong>Phường xã:</strong></label>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <p class="col-form-label input-label">{{ $customer->ward->name ?? '...' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-sm-5">
                                             <label for="example-text-input" class="col-form-label input-label"><strong>Địa
-                                                    chỉ văn
-                                                    phòng:</strong></label>
+                                                    chỉ cụ thể:</strong></label>
                                         </div>
                                         <div class="col-sm-7">
                                             <p class="col-form-label input-label">{{ $customer->address ?? "[N/A]"}}</p>
@@ -168,27 +191,53 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="head-title-addbtn">
-                                <h4 class="header-title">Liên hệ</h4>
+                                <h4 class="header-title">Người đại diện</h4>
                             </div>
                             <div class="data-tables datatable-dark">
                                 <table id="dataTable3" class="text-center table-business">
                                     <thead class="text-capitalize">
                                         <tr>
-                                            <th>Người liên hệ</th>
-                                            <th>Chức vụ</th>
-                                            <th>Số điện thoại</th>
-                                            <th>Địa chỉ</th>
+                                            <th>#</th>
+                                            <th>Tên người đại diện</th>
+                                            {{-- <th>Đại diện cho khách hàng</th> --}}
                                             <th>Email</th>
+                                            <th>Thao tác</th>
+                                            {{-- <th>Ngày tạo</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Lê Minh Thắng</td>
-                                            <td>Kỹ thuật</td>
-                                            <td>0334567878</td>
-                                            <td>...</td>
-                                            <td>thang@gmail.com</td>
-                                        </tr>
+    
+                                        @foreach ($representers ?? [] as $item)
+                                            <tr>
+                                                <td>{{ $item->id }}</td>
+                                                <td>{{ strlen($item->name) > 20 ? mb_substr($item->name, 0, 15, 'UTF-8') . '...' : $item->name }}
+                                                </td>
+                                                {{-- <td>{{ $item->customer->name }}</td> --}}
+                                                {{-- <td>{{ strlen($item->customer->name) > 20 ? mb_substr($item->customer->name, 0, 15, 'UTF-8') . '...' : $item->customer->name }}
+                                                </td> --}}
+                                                {{-- <td>
+                                                    <span> {{ $item->province->name ?? '...' }} -
+                                                        {{ $item->district->name ?? '...' }} -
+                                                        {{ $item->ward->name ?? '...' }}</span>
+                                                </td> --}}
+                                                <td>{{ $item->email }}</td>
+    
+                                                <td>
+                                                    <ul class="d-flex justify-content-center">
+                                                        <li class="mr-2"><a
+                                                                href="{{ route('get.representer_detail', $item->id) }}"
+                                                                class="text-primary"><i class="fa fa-info-circle"
+                                                                    aria-hidden="true"></i></a></li>
+                                                        <li class="mr-2"><a
+                                                                href="{{ route('get.representer_update', $item->id) }}"
+                                                                class="text-primary"><i class="fa fa-edit"></i></a></li>
+                                                        <li><a href="{{ route('get.representer_delete', $item->id) }}"
+                                                                class="text-danger"><i class="ti-trash"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                {{-- <td>{{ $item->created_at }}</td> --}}
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

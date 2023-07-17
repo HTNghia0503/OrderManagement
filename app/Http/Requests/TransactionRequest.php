@@ -21,8 +21,10 @@ class TransactionRequest extends FormRequest
         return [
             'name' => 'required',
             'start_day' => 'required',
-            'deadline_date' => 'required',
+            'deadline_day' => 'required',
             'transaction_type' => 'required',
+            'customer_id' => 'required',
+            'contact_id' => 'required',
         ];
     }
 
@@ -31,8 +33,10 @@ class TransactionRequest extends FormRequest
         return [
             'name.required' => 'Tên giao dịch không được để trống!',
             'start_day.required' => 'Hãy chọn ngày bắt đầu giao dịch!',
-            'deadline_date.required' => 'Hãy chọn ngày hoàn thành giao dịch!',
-            'transaction_type.required' => 'Hãy chọn loại giao dịch!'
+            'deadline_day.required' => 'Hãy chọn ngày hoàn thành giao dịch!',
+            'transaction_type.required' => 'Hãy chọn loại giao dịch!',
+            'customer_id.required' => 'Hãy chọn khách hàng!',
+            'contact_id.required' => 'Hãy chọn người liên hệ!',
         ];
     }
 }

@@ -52,11 +52,12 @@
                             <!-- Khách hàng -->
                             <li>
                                 <a href="javascript:void(0)" aria-expanded="true">
-                                <i class="ti-user"></i><span>Khách hàng</span></a>
+                                <i class="ti-user"></i><span>Khách Hàng</span></a>
                                 <ul class="collapse">
                                     <li><a href="{{ route('get.index') }}">Khách hàng</a></li>
                                     <li><a href="{{ route('get.contact_index') }}">Liên hệ với khách hàng</a></li>
                                     <li><a href="{{ route('get.category_index') }}">List khách hàng</a></li>
+                                    <li><a href="{{ route('get.representer_index') }}">Người đại diện</a></li>
                                 </ul>
                             </li>
 
@@ -66,6 +67,7 @@
                                 <i class="fa fa-briefcase"></i><span>Kinh doanh</span></a>
                                 <ul class="collapse">
                                     <li class="active"><a href="{{ route('get.transaction_index') }}">Giao dịch với khách hàng</a></li>
+                                    <li><a href="{{ route ('get.goods_index') }}">Hàng hóa</a></li>
                                     <li><a href="{{ route ('get.order_index') }}">Đơn hàng</a></li>
                                     <li><a href="{{ route('get.contract_index') }}">Hợp đồng bán ra</a></li>
                                 </ul>
@@ -81,7 +83,7 @@
 
                              <!-- Chat -->
                              <li>
-                                <a href="{{ url('').'/'.config('chatify.routes.prefix') }}" aria-expanded="true"><i class="fa fa-bar-chart" aria-hidden="true"></i> <span>Chat</span></a>
+                                <a href="{{ url('').'/'.config('chatify.routes.prefix') }}" aria-expanded="true"><i class="fa fa-commenting-o" aria-hidden="true"></i><span>Chat</span></a>
                             </li>
                         </ul>
                     </nav>
@@ -119,6 +121,7 @@
                     <!-- Profile Info -->
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right">
+                            <img class="avatar user-thumb" src="{{ Chatify::getUserWithAvatar(Auth::user())->avatar }}" onerror="this.src='/assets/images/author/avatar.png'" alt="avatar">
                             {{-- <img class="avatar user-thumb" src="{{ pare_url_file(Auth::user()->avatar) }}" onerror="this.src='/assets/images/author/avatar.png'"alt="avatar"> --}}
                             <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{ Auth::user()->name ?? "[N\A]" }}<i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu">

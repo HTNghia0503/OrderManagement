@@ -166,4 +166,9 @@
 
 # Video27 Chat system
 - Cài đặt chatify: composer require munafio/chatify
-- 
+
+# Video28 Chat system
+- Tổng hợp code báo cáo tuần 6
+
+# Video 29 Tạo chức năng người đại diện cho khách hàng
+- Tạo branch representer từ branch minhthang

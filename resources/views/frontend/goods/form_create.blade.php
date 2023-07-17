@@ -69,9 +69,12 @@
             <div class="form-group">
                 <label for="price_input" class="col-form-label input-label">Đơn giá nhập:</label>
                 <div class="textbox-unitprice">
-                    <input class="form-control custom-select-height" type="text" value="{{ old('input_price', $goods->input_price ?? '') }}" id="price_input" style="border-radius: 3px 0 0 3px !important;">
+                    <input name="input_price" class="form-control custom-select-height" type="text" value="{{ old('input_price', $goods->input_price ?? '') }}" id="price_input" style="border-radius: 3px 0 0 3px !important;">
                     <span id="unit-price-input" class="unit-price" style="border-radius: 0 3px 3px 0 !important;">0</span>
                 </div>
+                @error('input_price')
+                    <small id="" class="form-text text-danger">{{ $errors->first('input_price') }}</small>
+                @enderror
             </div>
             {{-- Xử lý tự load và hiển thị Đơn giá nhập --}}
             <script>
@@ -87,16 +90,22 @@
             <div class="form-group">
                 <label for="markup_ratio" class="col-form-label input-label">Tỷ lệ vênh:</label>
                 <div class="textbox-unitprice">
-                    <input class="form-control custom-select-height" type="text" value="{{ old('markup_ratio', $goods->markup_ratio ?? '') }}" id="markup_ratio" style="border-radius: 3px 0 0 3px !important;">
+                    <input name="markup_ratio" class="form-control custom-select-height" type="text" value="{{ old('markup_ratio', $goods->markup_ratio ?? '') }}" id="markup_ratio" style="border-radius: 3px 0 0 3px !important;">
                     <span class="unit-price" style="border-radius: 0 3px 3px 0 !important;">%</span>
                 </div>
+                @error('markup_ratio')
+                    <small id="" class="form-text text-danger">{{ $errors->first('markup_ratio') }}</small>
+                @enderror
             </div>
             <div class="form-group">
                 <label for="price_output" class="col-form-label input-label">Đơn giá xuất:</label>
                 <div class="textbox-unitprice">
-                    <input class="form-control custom-select-height" type="text" value="{{ old('output_price', $goods->output_price ?? '') }}" id="price_output" style="border-radius: 3px 0 0 3px !important;">
+                    <input name="output_price" class="form-control custom-select-height" type="text" value="{{ old('output_price', $goods->output_price ?? '') }}" id="price_output" style="border-radius: 3px 0 0 3px !important;">
                     <span id="unit-price-output" class="unit-price" style="border-radius: 0 3px 3px 0 !important;">0</span>
                 </div>
+                @error('output_price')
+                    <small id="" class="form-text text-danger">{{ $errors->first('output_price') }}</small>
+                @enderror
             </div>
             {{-- Xử lý tự động load dữ liệu lên ô "Đơn giá xuất" = "Đơn giá nhập" x "Tỷ lệ vênh" + "Đơn giá nhập" --}}
             <script>
@@ -122,11 +131,26 @@
                 });
             </script>
             {{-- End --}}
-            <div class="form-group">
-                <label for="goods_tax" class="col-form-label input-label">Thuế:</label>
-                <div class="textbox-unitprice">
-                    <input class="form-control custom-select-height" type="text" value="{{ old('tax', $goods->tax ?? '') }}" id="goods_tax" style="border-radius: 3px 0 0 3px !important;">
-                    <span class="unit-price" style="border-radius: 0 3px 3px 0 !important;">%</span>
+            <div class="row">
+                <div class="col-6 form-group">
+                    <label for="goods_tax" class="col-form-label input-label">Thuế:</label>
+                    <div class="textbox-unitprice">
+                        <input name="tax" class="form-control custom-select-height" type="text" value="{{ old('tax', $goods->tax ?? '') }}" id="goods_tax" style="border-radius: 3px 0 0 3px !important;">
+                        <span class="unit-price" style="border-radius: 0 3px 3px 0 !important;">%</span>
+                    </div>
+                    @error('tax')
+                        <small id="" class="form-text text-danger">{{ $errors->first('tax') }}</small>
+                    @enderror
+                </div>
+                <div class="col-6 form-group">
+                    <label for="tax_value" class="col-form-label input-label">Tiền thuế:</label>
+                    <div class="textbox-unitprice">
+                        <input name="tax_value" class="form-control custom-select-height" type="text" value="{{ old('tax_value', $goods->tax_value ?? '') }}" id="tax_value" style="border-radius: 3px 0 0 3px !important;">
+                        <span id="unit-price-tax_value" class="unit-price" style="border-radius: 0 3px 3px 0 !important;">0</span>
+                    </div>
+                    @error('tax_value')
+                        <small id="" class="form-text text-danger">{{ $errors->first('tax_value') }}</small>
+                    @enderror
                 </div>
             </div>
             <script>
@@ -139,6 +163,11 @@
                         $('#total_value_goods').val(totalValue);
                         var formattedTotal = parseFloat(totalValue).toLocaleString('vi-VN');
                         $('#total_highlight').text(formattedTotal);
+
+                        var taxValue = outputPrice * (goodsTax / 100);
+                        $('#tax_value').val(taxValue);
+                        var formattedTaxValue = parseFloat(taxValue).toLocaleString('vi-VN');
+                        $('#unit-price-tax_value').text(formattedTaxValue);
                     });
                 })
             </script>
@@ -146,13 +175,16 @@
             <div class="form-group">
                 <label for="total_value_goods" class="col-form-label input-label">Tổng tiền mặt hàng:</label>
                 <div class="textbox-unitprice">
-                    <input class="form-control custom-select-height" type="text" value="{{ old('total', $goods->total ?? '') }}" id="total_value_goods" style="border-radius: 3px 0 0 3px !important;" disabled>
+                    <input name="total" class="form-control custom-select-height" type="text" value="{{ old('total', $goods->total ?? '') }}" id="total_value_goods" style="border-radius: 3px 0 0 3px !important;" readonly>
                     <span class="unit-price unit-price-exp" style="border-radius: 0 3px 3px 0 !important;" id="total_highlight">0</span>
                 </div>
+                @error('total')
+                    <small id="" class="form-text text-danger">{{ $errors->first('total') }}</small>
+                @enderror
             </div>
         </div>
     </div>
-    <div class="btn-group-head-order mt-3">
+    <div class="btn-group-head-order mt-5">
         <button type="submit" class="btn btn-addorder"><i class="fa fa-plus-circle" aria-hidden="true"></i><span>Thêm Hàng Hóa</span></button>
     </div>
 </form>
